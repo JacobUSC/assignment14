@@ -1,6 +1,6 @@
 const getCrafts = async () => {
 	try {
-		return (await fetch("http://localhost:3000/api/crafts")).json();
+		return (await fetch("https://assignment14-6iih.onrender.com/api/crafts")).json();
 	} catch (error) {
 		console.log(error);
 		return "";
@@ -9,14 +9,14 @@ const getCrafts = async () => {
 
 const getCraft = (craft) => {
 	const craftImg = document.createElement("img");
-	craftImg.src = "http://localhost:3000/images/" + craft.image;
+	craftImg.src = "https://assignment14-6iih.onrender.com/images/" + craft.image;
 	craftImg.onclick = () => {
 		const overlay = document.getElementById("transparent-overlay");
 		const modalDiv = document.getElementById("craft-modal");
 		modalDiv.innerHTML = "";
 		const imgDiv = document.createElement("div");
 		const flexImg = document.createElement("img");
-		flexImg.src = "http://localhost:3000/images/" + craft.image;
+		flexImg.src = "https://assignment14-6iih.onrender.com/images/" + craft.image;
 		imgDiv.append(flexImg);
 		const textDiv = document.createElement("div");
 		const buttonWrap = document.createElement("p");
