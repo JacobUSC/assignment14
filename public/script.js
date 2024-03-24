@@ -1,6 +1,6 @@
 const getCrafts = async () => {
 	try {
-		return (await fetch("https://assignment14-6iih.onrender.com/api/crafts")).json();
+		return (await fetch("./api/crafts")).json();
 	} catch (error) {
 		console.log(error);
 		return "";
@@ -9,14 +9,14 @@ const getCrafts = async () => {
 
 const getCraft = (craft) => {
 	const craftImg = document.createElement("img");
-	craftImg.src = "https://assignment14-6iih.onrender.com/images/" + craft.image;
+	craftImg.src = "./images/" + craft.image;
 	craftImg.onclick = () => {
 		const overlay = document.getElementById("transparent-overlay");
 		const modalDiv = document.getElementById("craft-modal");
 		modalDiv.innerHTML = "";
 		const imgDiv = document.createElement("div");
 		const flexImg = document.createElement("img");
-		flexImg.src = "https://assignment14-6iih.onrender.com/images/" + craft.image;
+		flexImg.src = "./images/" + craft.image;
 		imgDiv.append(flexImg);
 		const textDiv = document.createElement("div");
 		const buttonWrap = document.createElement("p");
@@ -60,10 +60,20 @@ const showCrafts = async () => {
 		craftDiv.innerHTML = "The craftpocalypse has happened there are no more crafts";
 		return;
 	}
-	console.log(craftsJSON);
+	let count = 0;
+	let column = document.createElement("div");
+	column.classList.add("column");
 	craftsJSON.forEach((craft) => {
-		craftDiv.append(getCraft(craft));
+		column.append(getCraft(craft));
+		count++;
+		if (count > 6) {
+			craftDiv.append(column);
+			column = document.createElement("div");
+			column.classList.add("column");
+			count = 0;
+		}
 	});
+	craftDiv.append(column);
 };
 
 showCrafts();

@@ -1,3 +1,11 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+}
+
 header {
 	display: flex;
 }
@@ -6,10 +14,16 @@ header {
 	display: none;
 }
 
+button {
+	background: none;
+	border: none;
+}
+
 #transparent-overlay {
 	background: rgba(128, 128, 128, 0.3);
 	width: 100%;
 	height: 100%;
+	margin: auto;
 	position: fixed;
 	transition: opacity 0.25s ease;
 	z-index: 1029;
@@ -17,9 +31,8 @@ header {
 
 .modal {
 	background-color: white;
-	border-radius: 15px;
-	width: 70%;
 	height: fit-content;
+	width: fit-content;
 	margin: auto;
 	margin-top: 5%;
 	padding-bottom: 5px;
@@ -28,11 +41,44 @@ header {
 #crafts {
 	display: flex;
 	flex-wrap: wrap;
-	width: 95%;
-	margin: auto;
+	padding: 0 4px;
 }
 
 #crafts img {
 	margin-top: 8px;
-	margin-left: 8px;
+	vertical-align: middle;
+	width: 100%;
+}
+
+.column {
+	flex: 25%;
+	max-width: 25%;
+	padding: 0 4px;
+}
+
+#craft-modal {
+	display: flex;
+}
+
+#craft-modal div {
+	padding: 5px;
+	width: auto;
+}
+
+#btn-wrap {
+	text-align: right;
+}
+
+@media (max-width: 800px) {
+	.column {
+		flex: 50%;
+		max-width: 50%;
+	}
+}
+
+@media (max-width: 600px) {
+	.column {
+		flex: 100%;
+		max-width: 100%;
+	}
 }
