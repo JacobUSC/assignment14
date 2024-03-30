@@ -6,8 +6,44 @@
 		<link rel="stylesheet" href="styles.css" />
 	</head>
 	<body>
-		<div id="transparent-overlay" class="hidden">
+		<div id="craft-overlay" class="transparent-overlay hidden">
 			<div id="craft-modal" class="modal hidden"></div>
+		</div>
+		<div id="add-craft-overlay" class="transparent-overlay hidden">
+			<div id="add-craft-modal" class="modal hidden">
+				<form id="craft-form">
+					<div id="img-div">
+						<p>
+							<img id="preview" />
+						</p>
+						<p>
+							<label for="image">Select an Image</label>
+							<input type="file" id="image" name="image" accept="image/*" required />
+						</p>
+					</div>
+					<div id="text-content">
+						<h1>Add Your Craft</h1>
+						<p>
+							<label for="name">Name:</label>
+							<input type="text" id="name" name="name" required />
+						</p>
+						<p>
+							<label for="description">Description:</label>
+							<textarea id="description" name="description" required></textarea>
+						</p>
+						<p>
+							<label for="supplies">Supplies:</label>
+							<input type="text" id="supplies" name="supplies" />
+							<button id="add-supply">Add Supply</button>
+							<section id="supplies-list"></section>
+						</p>
+						<div id="buttons-flex">
+							<button id="cancel" class="form-buttons">Cancel</button>
+							<button type="submit" id="save" class="form-buttons">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
 		</div>
 		<header>
 			<h1>Buy and Sell Crafts</h1>
