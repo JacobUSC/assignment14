@@ -14,11 +14,6 @@ const getCraft = (craft) => {
 		const overlay = document.getElementById("craft-overlay");
 		const modalDiv = document.getElementById("craft-modal");
 		modalDiv.innerHTML = "";
-		const imgDiv = document.createElement("div");
-		const flexImg = document.createElement("img");
-		flexImg.src = "./images/" + craft.image;
-		imgDiv.append(flexImg);
-		const textDiv = document.createElement("div");
 		const buttonWrap = document.createElement("p");
 		buttonWrap.id = "btn-wrap";
 		const close = document.createElement("button");
@@ -28,7 +23,14 @@ const getCraft = (craft) => {
 		};
 		close.innerHTML = "X";
 		buttonWrap.append(close);
-		textDiv.append(buttonWrap);
+		modalDiv.append(buttonWrap);
+		const flexDiv = document.createElement("div");
+		flexDiv.id =	"flex-div";
+		const imgDiv = document.createElement("div");
+		const flexImg = document.createElement("img");
+		flexImg.src = "./images/" + craft.image;
+		imgDiv.append(flexImg);
+		const textDiv = document.createElement("div");
 		const craftH2 = document.createElement("h2");
 		craftH2.innerHTML = craft.name;
 		textDiv.append(craftH2);
@@ -45,8 +47,9 @@ const getCraft = (craft) => {
 			list.appendChild(item);
 		});
 		textDiv.append(list);
-		modalDiv.append(imgDiv);
-		modalDiv.append(textDiv);
+		flexDiv.append(imgDiv);
+		flexDiv.append(textDiv);
+		modalDiv.append(flexDiv);
 		overlay.classList.remove("hidden");
 		modalDiv.classList.remove("hidden");
 	};
@@ -80,7 +83,7 @@ const showCrafts = async () => {
 const changeImage = (event) => {
 	const preview = document.getElementById("preview");
 	if (!event.target.files.length) {
-		preview.src = "";
+		preview.src = "https://place-hold.it/200x300";
 		return;
 	}
 	preview.src = URL.createObjectURL(event.target.files.item(0));
@@ -88,19 +91,21 @@ const changeImage = (event) => {
 
 const addSupply = (event) => {
 	event.preventDefault();
-	const supplyGet = document.getElementById("supplies");
+	const supplyGet = document.getElementById("supply");
 	const suppliesList = document.getElementById("supplies-list");
 	const supplyInput = document.createElement("input");
 	supplyInput.type = "text";
 	supplyInput.value = supplyGet.value;
-	supplyInput.innerHTML = supplyGet.value;
-	suppliesList.append(supplyInput);
+	const wrap = document.createElement("p");
+	wrap.append(supplyInput);
+	suppliesList.append(wrap);
+	supplyGet.value = "";
 };
 
 const resetForm = () => {
 	document.getElementById("craft-form").reset();
 	document.getElementById("supplies-list").innerHTML = "";
-	document.getElementById("preview").src = "";
+	document.getElementById("preview").src = "https://place-hold.it/200x300";
 };
 
 const openAddCraft = () => {
@@ -133,12 +138,14 @@ const submitCraft = async (event) => {
 	const form = document.getElementById("craft-form");
 	const formData = new FormData(form);
 	formData.append("supplies", getSupplies());
+	formData.delete("supply");
+	console.log(...formData);
 	const response = await fetch("/api/crafts", {
 		method: "POST",
-		body: formData,
+		body: formData
 	});
 	await response.json();
-	resetForm();
+	closeAddCraft();
 	showCrafts();
 };
 
