@@ -13,14 +13,15 @@ const getCraft = (craft) => {
 	craftImg.onclick = () => {
 		const overlay = document.getElementById("craft-overlay");
 		const modalDiv = document.getElementById("craft-modal");
+		const closeModal = () => {
+			overlay.classList.add("hidden");
+			modalDiv.classList.add("hidden");
+		};
 		modalDiv.innerHTML = "";
 		const buttonWrap = document.createElement("p");
 		buttonWrap.id = "btn-wrap";
 		const close = document.createElement("button");
-		close.onclick = () => {
-			overlay.classList.add("hidden");
-			modalDiv.classList.add("hidden");
-		};
+		close.onclick = closeModal;
 		close.innerHTML = "X";
 		buttonWrap.append(close);
 		modalDiv.append(buttonWrap);
@@ -33,6 +34,34 @@ const getCraft = (craft) => {
 		const textDiv = document.createElement("div");
 		const craftH2 = document.createElement("h2");
 		craftH2.innerHTML = craft.name;
+
+		const editButton = document.createElement("button");
+		editButton.id = "edit-button";
+		editButton.innerHTML = "Edit";
+		editButton.onclick = async (event) => {
+			event.preventDefault();
+			closeModal();
+			openEditCraft(craft);
+		};
+		craftH2.append(editButton);
+		const deleteButton = document.createElement("button");
+		deleteButton.id = "delete-button";
+		deleteButton.innerHTML = "Delete";
+		deleteButton.onclick = async (event) => {
+			event.preventDefault();
+			let response = await fetch(`/api/crafts/${craft._id}`, {
+				method:"DELETE",
+				headers:{"Content-Type":"application/json;charset=utf-8"}
+			});
+			if(response.status != 200){
+				console.log("Error deleting");
+				return;
+			}
+			let result = await response.json();
+			showCrafts();
+			closeModal();
+		};
+		craftH2.append(deleteButton);
 		textDiv.append(craftH2);
 		const descP = document.createElement("p");
 		descP.innerHTML = craft.description;
@@ -55,6 +84,8 @@ const getCraft = (craft) => {
 	};
 	return craftImg;
 };
+
+
 
 const showCrafts = async () => {
 	const craftsJSON = await getCrafts();
@@ -116,6 +147,21 @@ const openAddCraft = () => {
 	modalDiv.classList.remove("hidden");
 };
 
+const openEditCraft = (craft) => {
+	const form = document.getElementById("craft-form");
+	form.id.value = craft.id;
+	form.name.value = craft.name;
+	form.description.value = craft.description;
+	document.getElementById("preview").src = craft.image;
+	const suppliesList = document.getElementById("supplies-list");
+	craft.supplies.forEach((supply) => {
+		const supplyInput = document.createElement("input");
+		supplyInput.type = "text";
+		supplyInput.value = supply;
+		suppliesList.append(supplyInput);
+	});
+};
+
 const closeAddCraft = () => {
 	const overlay = document.getElementById("add-craft-overlay");
 	const modalDiv = document.getElementById("add-craft-modal");
@@ -133,10 +179,12 @@ const getSupplies = () => {
 	return supplies;
 };
 
+
 const submitCraft = async (event) => {
 	event.preventDefault();
 	const form = document.getElementById("craft-form");
 	const formData = new FormData(form);
+	//todo edit
 	formData.append("supplies", getSupplies());
 	formData.delete("supply");
 	console.log(...formData);

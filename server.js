@@ -209,6 +209,7 @@ app.post("/api/crafts", upload.single("image"), (req, res) => {
 	const result = validateCraft(req.body);
 	if (result.error) {
 		res.status(400).send(result.error.details[0].message);
+		return;
 	}
 	const craft = {
 		_id: crafts.length + 1,
@@ -221,6 +222,35 @@ app.post("/api/crafts", upload.single("image"), (req, res) => {
 	}
 	crafts.push(craft);
 	res.send(crafts);
+});
+
+app.put("/api/crafts/:id", upload.single("image"), (req, res) => {
+	const craft = crafts.find((r)=>r._id === parseInt(req.params.id));
+	if(!craft){
+		res.send(404).send("Craft with given id was not found");
+	}
+	const result = validateRecipe(req.body);
+	if (result.error) {
+		res.status(400).send(result.error.details[0].message);
+		return;
+	}
+	craft.name = req.body.name;
+	craft.description = req.body.description;
+	craft.supplies = req.body.supplies.split(",");
+	if (req.file) {
+		craft.image = req.file.filename;
+	}
+	res.send(craft);
+});
+
+app.delete("/api/crafts/:id", upload.single("image"), (req, res) => {
+	const craft = crafts.find((r)=>r._id === parseInt(req.params.id));
+	if(!craft){
+		res.send(404).send("Craft with given id was not found");
+	}
+	const index = crafts.indexOf(craft);
+	crafts.splice(index, 1);
+	res.send(craft);
 });
 
 const validateCraft = (craft) => {

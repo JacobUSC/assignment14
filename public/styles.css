@@ -124,6 +124,13 @@ form textarea {
 	vertical-align: top;
 }
 
+#preview {
+	max-height: 500px;
+	height: auto;
+	max-width: 500px;
+	width: auto;
+}
+
 @media (max-width: 800px) {
 	.column {
 		flex: 50%;
