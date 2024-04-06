@@ -26,7 +26,7 @@ const getCraft = (craft) => {
 		buttonWrap.append(close);
 		modalDiv.append(buttonWrap);
 		const flexDiv = document.createElement("div");
-		flexDiv.id =	"flex-div";
+		flexDiv.id = "flex-div";
 		const imgDiv = document.createElement("div");
 		const flexImg = document.createElement("img");
 		flexImg.src = "./images/" + craft.image;
@@ -34,10 +34,9 @@ const getCraft = (craft) => {
 		const textDiv = document.createElement("div");
 		const craftH2 = document.createElement("h2");
 		craftH2.innerHTML = craft.name;
-
 		const editButton = document.createElement("button");
 		editButton.id = "edit-button";
-		editButton.innerHTML = "Edit";
+		editButton.innerHTML = "&#9998;";
 		editButton.onclick = async (event) => {
 			event.preventDefault();
 			closeModal();
@@ -46,7 +45,7 @@ const getCraft = (craft) => {
 		craftH2.append(editButton);
 		const deleteButton = document.createElement("button");
 		deleteButton.id = "delete-button";
-		deleteButton.innerHTML = "Delete";
+		deleteButton.innerHTML = "&#128465;";
 		deleteButton.onclick = async (event) => {
 			event.preventDefault();
 			let response = await fetch(`/api/crafts/${craft._id}`, {
@@ -84,8 +83,6 @@ const getCraft = (craft) => {
 	};
 	return craftImg;
 };
-
-
 
 const showCrafts = async () => {
 	const craftsJSON = await getCrafts();
@@ -148,11 +145,12 @@ const openAddCraft = () => {
 };
 
 const openEditCraft = (craft) => {
+	resetForm();
 	const form = document.getElementById("craft-form");
-	form.id.value = craft.id;
+	form._id.value = craft._id;
 	form.name.value = craft.name;
 	form.description.value = craft.description;
-	document.getElementById("preview").src = craft.image;
+	document.getElementById("preview").src = "images/" + craft.image;
 	const suppliesList = document.getElementById("supplies-list");
 	craft.supplies.forEach((supply) => {
 		const supplyInput = document.createElement("input");
@@ -160,6 +158,10 @@ const openEditCraft = (craft) => {
 		supplyInput.value = supply;
 		suppliesList.append(supplyInput);
 	});
+	const overlay = document.getElementById("add-craft-overlay");
+	const modalDiv = document.getElementById("add-craft-modal");
+	overlay.classList.remove("hidden");
+	modalDiv.classList.remove("hidden");
 };
 
 const closeAddCraft = () => {
@@ -179,19 +181,27 @@ const getSupplies = () => {
 	return supplies;
 };
 
-
 const submitCraft = async (event) => {
 	event.preventDefault();
 	const form = document.getElementById("craft-form");
 	const formData = new FormData(form);
-	//todo edit
 	formData.append("supplies", getSupplies());
 	formData.delete("supply");
 	console.log(...formData);
-	const response = await fetch("/api/crafts", {
-		method: "POST",
-		body: formData
-	});
+	if (formData._id.value.trim() == "") {
+		const response = await fetch("/api/crafts", {
+			method: "POST",
+			body: formData
+		});
+	} else {
+		response = await fetch(`/api/crafts/${form._id.value}`, {
+			method: "PUT",
+			body: formData,
+		});
+	}
+	if (response.status != 200) {
+		console.log("Error adding / editing data");
+	}
 	await response.json();
 	closeAddCraft();
 	showCrafts();

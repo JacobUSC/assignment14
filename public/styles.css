@@ -131,6 +131,14 @@ form textarea {
 	width: auto;
 }
 
+#edit-button {
+	font-size: larger;
+}
+
+#delete-button {
+	font-size: larger;
+}
+
 @media (max-width: 800px) {
 	.column {
 		flex: 50%;
