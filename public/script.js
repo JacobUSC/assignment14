@@ -198,6 +198,7 @@ const submitCraft = async (event) => {
 			body: formData
 		});
 	} else {
+		console.log("put");
 		response = await fetch(`/api/crafts/${form._id.value}`, {
 			method: "PUT",
 			body: formData,
