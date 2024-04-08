@@ -219,6 +219,9 @@ app.post("/api/crafts", upload.single("image"), (req, res) => {
 	};
 	if (req.file) {
 		craft.image = req.file.filename;
+	} else {
+		res.status(400).send("No Image File Found");
+		return;
 	}
 	crafts.push(craft);
 	res.send(crafts);
@@ -226,10 +229,10 @@ app.post("/api/crafts", upload.single("image"), (req, res) => {
 
 app.put("/api/crafts/:id", upload.single("image"), (req, res) => {
 	const craft = crafts.find((r)=>r._id === parseInt(req.params.id));
-	if(!craft){
+	if (!craft) {
 		res.send(404).send("Craft with given id was not found");
 	}
-	const result = validateRecipe(req.body);
+	const result = validateCraft(req.body);
 	if (result.error) {
 		res.status(400).send(result.error.details[0].message);
 		return;

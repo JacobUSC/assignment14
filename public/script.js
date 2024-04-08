@@ -7,16 +7,19 @@ const getCrafts = async () => {
 	}
 };
 
+const closeModal = () => {
+	const overlay = document.getElementById("craft-overlay");
+	const modalDiv = document.getElementById("craft-modal");
+	overlay.classList.add("hidden");
+	modalDiv.classList.add("hidden");
+};
+
 const getCraft = (craft) => {
 	const craftImg = document.createElement("img");
 	craftImg.src = "./images/" + craft.image;
 	craftImg.onclick = () => {
 		const overlay = document.getElementById("craft-overlay");
 		const modalDiv = document.getElementById("craft-modal");
-		const closeModal = () => {
-			overlay.classList.add("hidden");
-			modalDiv.classList.add("hidden");
-		};
 		modalDiv.innerHTML = "";
 		const buttonWrap = document.createElement("p");
 		buttonWrap.id = "btn-wrap";
@@ -37,7 +40,7 @@ const getCraft = (craft) => {
 		const editButton = document.createElement("button");
 		editButton.id = "edit-button";
 		editButton.innerHTML = "&#9998;";
-		editButton.onclick = async (event) => {
+		editButton.onclick = (event) => {
 			event.preventDefault();
 			closeModal();
 			openEditCraft(craft);
@@ -134,6 +137,7 @@ const resetForm = () => {
 	document.getElementById("craft-form").reset();
 	document.getElementById("supplies-list").innerHTML = "";
 	document.getElementById("preview").src = "https://place-hold.it/200x300";
+	document.getElementById("error").innerHTML = "";
 };
 
 const openAddCraft = () => {
@@ -187,9 +191,9 @@ const submitCraft = async (event) => {
 	const formData = new FormData(form);
 	formData.append("supplies", getSupplies());
 	formData.delete("supply");
-	console.log(...formData);
-	if (formData._id.value.trim() == "") {
-		const response = await fetch("/api/crafts", {
+	let response = 0;
+	if (form._id.value.trim() == "") {
+		response = await fetch("/api/crafts", {
 			method: "POST",
 			body: formData
 		});
@@ -200,7 +204,7 @@ const submitCraft = async (event) => {
 		});
 	}
 	if (response.status != 200) {
-		console.log("Error adding / editing data");
+		document.getElementById("error").innerHTML = "Error adding/editing data"
 	}
 	await response.json();
 	closeAddCraft();

@@ -12,7 +12,7 @@
 		<div id="add-craft-overlay" class="transparent-overlay hidden">
 			<div id="add-craft-modal" class="modal hidden">
 				<p id="btn-wrap"><button id="cancel">X</button></p>
-				<form id="craft-form">
+				<form id="craft-form" method="post">
 					<input type="hidden" id="_id" name="_id" />
 					<div id="img-div">
 						<p>
@@ -20,11 +20,11 @@
 						</p>
 						<p>
 							<label id="image-label" for="image">Select an Image</label>
-							<input type="file" id="image" name="image" accept="image/*" required />
+							<input type="file" id="image" name="image" accept="image/*"/>
 						</p>
 					</div>
 					<div id="text-content">
-						<h1>Add Your Craft</h1>
+						<h1>Craft Editor</h1>
 						<p>
 							<label for="name">Name:</label>
 							<input type="text" id="name" name="name" required />
@@ -45,6 +45,7 @@
 							<button id="cancel" class="form-buttons">Cancel</button>
 							<button type="submit" id="save" class="form-buttons">Save</button>
 						</div>
+						<p id="error"></p>
 					</div>
 				</form>
 			</div>
