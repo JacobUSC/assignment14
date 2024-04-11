@@ -138,6 +138,7 @@ const resetForm = () => {
 	document.getElementById("supplies-list").innerHTML = "";
 	document.getElementById("preview").src = "https://place-hold.it/200x300";
 	document.getElementById("error").innerHTML = "";
+	document.getElementById("error-two").innerHTML = "";
 };
 
 const openAddCraft = () => {
@@ -191,21 +192,22 @@ const submitCraft = async (event) => {
 	const formData = new FormData(form);
 	formData.append("supplies", getSupplies());
 	formData.delete("supply");
-	let response = 0;
+	let response;
 	if (form._id.value.trim() == "") {
 		response = await fetch("/api/crafts", {
 			method: "POST",
 			body: formData
 		});
 	} else {
-		console.log("put");
 		response = await fetch(`/api/crafts/${form._id.value}`, {
 			method: "PUT",
 			body: formData,
 		});
 	}
 	if (response.status != 200) {
-		document.getElementById("error").innerHTML = "Error adding/editing data"
+		document.getElementById("error").innerHTML = "Error adding/editing data";
+		document.getElementById("error-two").innerHTML = `${response.status} ${response.statusText}`;
+		return;
 	}
 	await response.json();
 	closeAddCraft();

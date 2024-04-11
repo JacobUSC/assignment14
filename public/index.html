@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<!-- Jacob Russell CSCE 242-001 -->
-		<title>Assignment 14-15-17</title>
+		<title>Assignment 14-15-17-18</title>
 		<link rel="stylesheet" href="styles.css" />
 	</head>
 	<body>
@@ -27,16 +27,16 @@
 						<h1>Craft Editor</h1>
 						<p>
 							<label for="name">Name:</label>
-							<input type="text" id="name" name="name" required />
+							<input type="text" id="name" name="name" minlength="3" required />
 						</p>
 						<p>
 							<label id="description-label" for="description">Description:</label>
-							<textarea id="description" name="description" rows="2" cols="50" required></textarea>
+							<textarea id="description" name="description" rows="2" cols="50" minlength="3" required></textarea>
 						</p>
 						<div>
 							<p>
 								<label for="supply">Supplies:</label>
-								<input type="text" id="supply" name="supply" />
+								<input type="text" id="supply" name="supply"/>
 								<button id="add-supply">Add Supply</button>
 							</p>
 							<section id="supplies-list"></section>
@@ -46,6 +46,7 @@
 							<button type="submit" id="save" class="form-buttons">Save</button>
 						</div>
 						<p id="error"></p>
+						<p id="error-two"></p>
 					</div>
 				</form>
 			</div>
